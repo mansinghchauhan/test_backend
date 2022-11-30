@@ -1,0 +1,178 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Social Will App",
+    "description": "Social Will API Docs",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "host": "localhost:5000",
+  "basePath": "/",
+  "paths": {
+    "/api/users/register": {
+      "post": {
+        "tags": ["User"],
+        "summary": "To register an user in to the system with Name Email and Phone Number",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "User details to register a new user",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserInput"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GeneralResponse"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/users/verify-otp": {
+      "post": {
+        "tags": ["User"],
+        "summary": "To verify the user's account by otp and get the Auth token",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "To verify a new user",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserRegisterOtpVerificationInput"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/UserAuthResponse"
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "User": {
+      "required": ["name", "_id", "email", "phoneNumber"],
+      "properties": {
+        "_id": {
+          "type": "integer",
+          "uniqueItems": true
+        },
+        "verified": {
+          "type": "boolean"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "phoneNumber": {
+          "type": "string"
+        }
+      }
+    },
+    "GeneralResponse": {
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "ErrorResponse": {
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "success": {
+          "type": "boolean"
+        }
+      }
+    },
+    "UserInput": {
+      "required": ["name", "email", "phoneNumber"],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "phoneNumber": {
+          "type": "string"
+        }
+      }
+    },
+    "UserRegisterOtpVerificationInput": {
+      "required": ["otp", "phoneNumber"],
+      "properties": {
+        "otp": {
+          "type": "number"
+        },
+        "phoneNumber": {
+          "type": "string"
+        }
+      }
+    },
+    "UserAuthResponse": {
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "token": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"]
+}
